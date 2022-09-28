@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  mysql:
+    container_name: mern-db
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password 
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=neil
+      - MYSQL_PASSWORD=admin
+      - MYSQL_DATABASE=merndb
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db:/var/lib/mysql
+volumes:
+  db: {}
