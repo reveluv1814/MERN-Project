@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
-import { getTasksRequest } from "../api/tasks.api";
+import { useEffect } from "react";
 import TaskCard from "../components/TasksCard";
 
+//importo desde el contexto el use state para usarlo
+import { useTasks } from "../context/TaskProvider";
+
 function TasksPage() {
-  //usestate crea una variable
-  const [tasks, setTask] = useState([]);
+  //traemos desde el context la variable task y el loadtask
+  const { tasks, loadTasks } = useTasks();
 
   //useEffect crea una funcion que se ejecuta al ingresar a la pagina
   useEffect(() => {
-    async function loadTasks() {
-      const response = await getTasksRequest();
-      setTask(response.data); //la variable del useState tiene este valor
-    }
-
     loadTasks();
   }, []);
 
