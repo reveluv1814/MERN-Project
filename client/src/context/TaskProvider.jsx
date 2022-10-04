@@ -3,6 +3,9 @@ import {
   getTasksRequest,
   deleteTaskRequest,
   createTaskRequest,
+  getTaskRequest,
+  updateTaskRequest,
+  toggleTaskDoneRequest,
 } from "../api/tasks.api";
 //este es contexto
 import { useContext, useState } from "react";
@@ -51,8 +54,45 @@ export const TaskContextProvider = ({ children }) => {
   const createTask = async (task) => {
     try {
       const response = await createTaskRequest(task);
-      setTasks([...tasks, response.data])
+      //setTasks([...tasks, response.data])
       console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //funcion para obtener una tarea por un id
+  const getTask = async (id) => {
+    try {
+      const response = await getTaskRequest(id);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //funcion para actualizar
+  const updateTask = async (id, newFields) => {
+    try {
+      const response = await updateTaskRequest(id, newFields);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //funcion para camiar el done de la tarea
+  const toggleTaskDone = async (id) => {
+    try {
+      const taskFound = tasks.find((task) => task.id == id); //busca un task con el id que le pasen
+      await toggleTaskDoneRequest(id, taskFound.done == 0 ? true : false); //hace la peticion al api
+
+      setTasks(
+        tasks.map((task) =>
+          //task.id == id ? (task.done = task.done == 0 ? 1 : 0) : task.done es la traduccion son dos ifs
+          task.id == id ? {...task, done: !task.done } : task
+        )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +100,17 @@ export const TaskContextProvider = ({ children }) => {
 
   //****PROVIDER QUE SE ENVIA********* */
   return (
-    <TaskContext.Provider value={{ tasks, loadTasks, deleteTask, createTask }}>
+    <TaskContext.Provider
+      value={{
+        tasks,
+        loadTasks,
+        deleteTask,
+        createTask,
+        getTask,
+        updateTask,
+        toggleTaskDone,
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );
