@@ -32,10 +32,12 @@ export const TaskContextProvider = ({ children }) => {
   //usestate crea una variable
   const [tasks, setTasks] = useState([]);
 
+
   // funcion para usarlo en un useefect en taskpage . esta funcion hace la peticion al sevidor
   async function loadTasks() {
     const response = await getTasksRequest();
-    setTasks(response.data); //la variable del useState tiene este valor
+    console.log(response)
+    setTasks(response); //la variable del useState tiene este valor
   }
 
   //funcion para eliminar tareas dentro de taskcard

@@ -1,7 +1,25 @@
 import axios from "axios";
 
-export const getTasksRequest = async () =>
-  await axios.get("http://localhost:4000/tasks");
+const token = await axios.get("http://localhost:4000/token", {
+  headers: { rol: "adminn" },
+});
+//console.log(token);
+
+export const getTasksRequest = async () => {
+  return await axios
+    .get("http://localhost:4000/tasks", {
+      headers: { Authorization: token.data },
+    })
+    .then((data) => {
+      console.log(data.data.auth)
+      if (data.data.auth) {
+        return data.data.result;
+      } else return [];
+    })
+    .catch(function (error) {
+      return false;
+    });
+};
 
 export const createTaskRequest = async (task) =>
   await axios.post("http://localhost:4000/tasks", task);

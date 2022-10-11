@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import TaskCard from "../components/TasksCard";
+import NotFound from "./NotFound";
 
 //importo desde el contexto el use state para usarlo
 import { useTasks } from "../context/TaskProvider";
@@ -15,8 +16,17 @@ function TasksPage() {
 
   //funcion para mostrar o listar las tareas
   function renderMain() {
-    if (tasks.length == 0) return <h1>No tasks yet</h1>;
-    return tasks.map((task) => <TaskCard task={task} key={task.id} />);
+    if (!tasks) {
+      return <NotFound />;
+    } else {
+      if (tasks.length == 0)
+        return (
+          <h1 className="text-5xl text-white font-bold text-center py-10">
+            No tasks yet
+          </h1>
+        );
+      return tasks.map((task) => <TaskCard task={task} key={task.id} />);
+    }
   }
 
   return (

@@ -1,11 +1,18 @@
 import { pool } from "../db.js";
+import jwt from "jsonwebtoken";
+
+export const getToken = (req, res) => {
+  var token = jwt.sign({ rol: req.headers.rol }, "shhhhh");
+  console.log(req.headers.rol);
+  res.json(token);
+};
 
 export const getTasks = async (req, res) => {
   try {
     const [result] = await pool.query(
       "SELECT * FROM tasks ORDER BY createAt ASC"
     );
-    res.json(result);
+    res.json({ auth: true, result });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
